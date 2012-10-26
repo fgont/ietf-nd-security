@@ -1754,16 +1754,38 @@ As discussed in <xref target="Section9.2.6.2"/> of this document, if broadcast o
 Consider the following network scenario:</t>
 
 <t>
-<figure title="Example network scenario for forwarding loop" anchor="scenario">
+<figure title="Example network scenario for forwarding loop" anchor="router-loop-scenario">
 <artwork align="center">
-BLAH
+ +----------+      +--------+         +----------+
+ | Router A |      | Host C |         | Router B |
+ +----------+      +--------+         +----------+
+      ||               ||                  ||
+  =================================================
+                    ||
+                    ||
+               +----------+
+               | Attacker |
+               +----------+
 </artwork>
 <postamble></postamble>
 </figure>
 </t>
 
 <t>
-An attacker could poison the neighbor cache of Router A and the neighbor cache of Router B, such that the IPv6 address of Host C maps to the Ethernet broadcast address (ff:ff:ff:ff:ff:ff). Afterwards, he could send a packet to the Ethernet broadcast address (ff:ff:ff:ff:ff:ff), with an IPv6 Destination Address equal to the IPv6 address of Host C. Upon receiving the packet, both Router A and Router C would decrement the Hop Limit of the packet, and would resend it to the Ethernet broadcast address. As a result, both Router A and Router B would now receive two copies of the same packet (one sent by Router A, and another sent by Router B). This would result in a ‘chain reaction’ that would only disappear when the Hop Limit of each of the packets is decremented to 0. The total number of packets, for a general scenario in which multiple routers are present on the link and are subject of the aforementioned neighbor cache poisoning attack, and the attacker sends the initial attack packet with an arbitrary Hop Limit (possibly 255 to get the maximum amplification factor) is:</t>
+An attacker could poison the neighbor cache of Router A and the neighbor cache of Router B, such that the IPv6 address of Host C maps to the Ethernet broadcast address (ff:ff:ff:ff:ff:ff). Afterwards, he could send a packet to the Ethernet broadcast address (ff:ff:ff:ff:ff:ff), with an IPv6 Destination Address equal to the IPv6 address of Host C. Upon receiving the packet, both Router A and Router C would decrement the Hop Limit of the packet, and would resend it to the Ethernet broadcast address. As a result, both Router A and Router B would now receive two copies of the same packet (one sent by Router A, and another sent by Router B). This would result in a ‘chain reaction’ that would only disappear when the Hop Limit of each of the packets is decremented to 0. The total number of packets, for a general scenario in which multiple routers are present on the link and are subject of the aforementioned neighbor cache poisoning attack, and the attacker sends the initial attack packet with an arbitrary Hop Limit (possibly 255 to get the maximum amplification factor) is:
+
+<figure title="Maximum amplification factor" anchor="max-amplif-factor">
+<artwork align="center">
+          HopLimit-1
+             ---
+             \          x
+Packets =    /   Routers
+             ---
+             x=0
+</artwork>
+<postamble></postamble>
+</figure>
+</t>
 
 <t>
 This equation does not take into account neither the possible ICMPv6 Redirect messages that each of the Routers could send, nor the possible ICMPv6 ‘time exceeded in transit’ error messages that each of the routers could possibly send to the Source Address of the packet when each of the ‘copies’ of the original packet is discarded as a result of their Hop Limit being decremented to 0.
