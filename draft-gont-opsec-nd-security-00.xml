@@ -86,21 +86,27 @@ The following subsections discuss a number of validation checks that should be p
 
 <section title="Router Solicitation message" anchor="Section9.2.1">
 
-<!--
+<t>
 The following figure illustrates the syntax of Router Solicitation messages:
+</t>
 
-      0                   1                   2                   3
-      0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-     +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-     |     Type      |     Code      |          Checksum             |
-     +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-     |                            Reserved                           |
-     +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-     |   Options ...
-     +-+-+-+-+-+-+-+-+-+-+-+-
+<t>
+<figure title="ICMPv6 Router Solicitation message format" anchor="rs-syntax">
+<artwork align="center">
+ 0                   1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|     Type      |     Code      |          Checksum             |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                            Reserved                           |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|   Options ...
++-+-+-+-+-+-+-+-+-+-+-+-
+</artwork>
+<postamble></postamble>
+</figure>
+</t>
 
-Figure 58: ICMPv6 Router Solicitation message format
--->
 <t>
 As can be inferred from syntax of Router Solicitation messages, any legitimate Router Solicitation message must have a length (as derived from the IPv6 length) that is 8 octets or more. If the packet does not pass this check, it should be silently dropped.
 </t>
@@ -146,25 +152,30 @@ If a ‘source link-layer address’ option is included, the following sanity ch
 
 <section title="Router Advertisement" anchor="Section9.2.2">
 
-<!--
+<t>
 The following figure illustrates the syntax of Router Advertisement messages.
+</t>
 
-      0                   1                   2                   3
-      0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-     +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-     |     Type      |     Code      |          Checksum             |
-     +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-     | Cur Hop Limit |M|O|H|Prf|Resvd|       Router Lifetime         |
-     +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-     |                         Reachable Time                        |
-     +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-     |                          Retrans Timer                        |
-     +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-     |   Options ...
-     +-+-+-+-+-+-+-+-+-+-+-+-
-
-Figure 59: ICMPv6 Router Advertisement message format
--->
+<t>
+<figure title="ICMPv6 Router Advertisement message format" anchor="ra-syntax">
+<artwork align="center">
+ 0                   1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|     Type      |     Code      |          Checksum             |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+| Cur Hop Limit |M|O|H|Prf|Resvd|       Router Lifetime         |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                         Reachable Time                        |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                          Retrans Timer                        |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|   Options ...
++-+-+-+-+-+-+-+-+-+-+-+-
+</artwork>
+<postamble></postamble>
+</figure>
+</t>
 
 <t>
 The Source Address of an IPv6 packet encapsulating a Router Advertisement message is set to a link-local address assigned to the interface from which the message is sent. Nodes should discard Router Advertisements whose Source Address is not a link-local address.
@@ -285,30 +296,36 @@ The Source link-layer address option specifies the link-layer address of the int
 </section>
 
 <section title="Neighbor Solicitation message" anchor="Section9.2.3">
-<!--
-
+<t>
 The following figure illustrates the format of Neighbor Solicitation messages:
+</t>
 
-        0                   1                   2                   3
-        0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-       |     Type      |     Code      |          Checksum             |
-       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-       |                           Reserved                            |
-       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-       |                                                               |
-       +                                                               +
-       |                                                               |
-       +                       Target Address                          +
-       |                                                               |
-       +                                                               +
-       |                                                               |
-       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-       |   Options ...
-       +-+-+-+-+-+-+-+-+-+-+-+-
 
-Figure 60: ICMPv6 Neighbor Solicitation message format
--->
+<t>
+<figure title="ICMPv6 Neighbor Solicitation message format" anchor="ns-syntax">
+<artwork align="center">
+ 0                   1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|     Type      |     Code      |          Checksum             |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                           Reserved                            |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                                                               |
++                                                               +
+|                                                               |
++                       Target Address                          +
+|                                                               |
++                                                               +
+|                                                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|   Options ...
++-+-+-+-+-+-+-+-+-+-+-+-
+</artwork>
+<postamble></postamble>
+</figure>
+</t>
+
 <t>
 The Source Address of an IPv6 packet encapsulating a Neighbor Solicitation message is set to an address assigned to the interface from which the message is sent, or to the unspecified address (::). 
 </t>
@@ -365,29 +382,35 @@ According to Section 4.3 of <xref target="RFC4861"/>, on link layers that have a
 <t>A node sends Neighbor Advertisements in response to Neighbor Solicitations and sends unsolicited Neighbor Advertisements in order to (unreliably) propagate new information quickly <xref target="RFC4861"/>.
 </t>
 
-<!--
+<t>
 The following figure illustrates the syntax of Neighbor Advertisement messages:
+</t>
 
-        0                   1                   2                   3
-        0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-       |     Type      |     Code      |          Checksum             |
-       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-       |R|S|O|                     Reserved                            |
-       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-       |                                                               |
-       +                                                               +
-       |                                                               |
-       +                       Target Address                          +
-       |                                                               |
-       +                                                               +
-       |                                                               |
-       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-       |   Options ...
-       +-+-+-+-+-+-+-+-+-+-+-+-
+<t>
+<figure title="ICMPv6 Neighbor Advertisement message format" anchor="na-syntax">
+<artwork align="center">
+ 0                   1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|     Type      |     Code      |          Checksum             |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|R|S|O|                     Reserved                            |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                                                               |
++                                                               +
+|                                                               |
++                       Target Address                          +
+|                                                               |
++                                                               +
+|                                                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|   Options ...
++-+-+-+-+-+-+-+-+-+-+-+-
+</artwork>
+<postamble></postamble>
+</figure>
+</t>
 
-Figure 61: ICMPv6 Neighbor Advertisement message format
--->
 <!-- XXX IMPORTANTE PARA EL DOCUMENTO DE CPNI! - - Creo que el chequeo de la Source Address esta mal -->
 <t>
 The Source Address of an IPv6 packet encapsulating a Neighbor Advertisement message is set to a link-local address assigned to the interface from which the message is sent. Nodes should discard Neighbor Advertisements that do not have a link-local address in the Source Address field.
@@ -471,37 +494,44 @@ The target link-layer address specifies the link-layer address of the target of 
 <t>
 Routers send Redirect packets to inform a host of a better first-hop node on the path to a destination, or to inform a host that the destination node is in fact a neighbor (i.e., it is attached to the same link).
 </t>
-<!--
+
+<t>
 The following figure illustrates the syntax of the Redirect message:
+</t>
 
-       0                   1                   2                   3
-       0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-      +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-      |     Type      |     Code      |          Checksum             |
-      +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-      |                           Reserved                            |
-      +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-      |                                                               |
-      +                                                               +
-      |                                                               |
-      +                       Target Address                          +
-      |                                                               |
-      +                                                               +
-      |                                                               |
-      +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-      |                                                               |
-      +                                                               +
-      |                                                               |
-      +                     Destination Address                       +
-      |                                                               |
-      +                                                               +
-      |                                                               |
-      +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-      |   Options ...
-      +-+-+-+-+-+-+-+-+-+-+-+-
+<t>
+<figure title="ICMPv6 Redirect message format" anchor="rd-syntax">
+<artwork align="center">
+ 0                   1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|     Type      |     Code      |          Checksum             |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                           Reserved                            |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                                                               |
++                                                               +
+|                                                               |
++                       Target Address                          +
+|                                                               |
++                                                               +
+|                                                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                                                               |
++                                                               +
+|                                                               |
++                     Destination Address                       +
+|                                                               |
++                                                               +
+|                                                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|   Options ...
++-+-+-+-+-+-+-+-+-+-+-+-
+</artwork>
+<postamble></postamble>
+</figure>
+</t>
 
-Figure 62: ICMPv6 Redirect message format
--->
 <t>
 The Source Address of the IPv6 header is set to the link-local address assigned to the interface from which the Redirect message is sent. A node that receives a Redirect message should verify that the Source Address of the IPv6 header is a link-local address. If the packet does not pass this check, the Redirect message should be silently dropped. The Source Address of a Redirect message must correspond to the IPv6 address of the current first-hop router for the specified ICMPv6 Destination Address (i.e., the IPv6 address specified in the Destination Address field of the ICMPv6 Redirect message). If the packet does not pass this check, it should be silently dropped.
 </t>
@@ -562,7 +592,9 @@ The Redirected header option allows the sender of the Redirect message to includ
 <t>
 Neighbor Discovery messages can include a number of options. Such options have the following general syntax:
 </t>
-<!--
+<t>
+<figure title="Neighbor Discovery option format" anchor="options-syntax">
+<artwork align="center">
  0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
@@ -571,9 +603,10 @@ Neighbor Discovery messages can include a number of options. Such options have t
 ~                              ...                              ~
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-Figure 63: Neighbor Discovery option format
--->
-
+</artwork>
+<postamble></postamble>
+</figure>
+</t>
 
 <t>The Type field is an 8-bit identifier of the type of option. As of this writing, the following options have been specified:
 </t>
@@ -689,15 +722,18 @@ The Source link-layer address option contains the link-layer address of the send
 The following figure illustrates the syntax of the source link-layer address:
 </t>
 
-<!--
-        0                   1                   2                   3
-        0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-       |     Type      |    Length     |    Link-Layer Address ...
-       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-
-Figure 65: ND Source link-layer address option
--->
+<t>
+<figure title="ND Source link-layer address option" anchor="slla-syntax">
+<artwork align="center">
+ 0                   1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|     Type      |    Length     |    Link-Layer Address ...
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+</artwork>
+<postamble></postamble>
+</figure>
+</t>
 
 <t>
 The Type field is set to 1. The Length field specifies the length of the option (including the Type and Length octets) in units of 8 octets. A node that receives an ICMPv6 message with this option should verify that the Length field is valid for the underlying link layer. For example, for IEEE 802 addresses the Length field must be 1 <xref target="RFC2464"/>. If the packet does not pass this check, it should be silently dropped. 
@@ -766,15 +802,18 @@ The Target link-layer address option contains the link-layer address of the Targ
 The following figure illustrates the syntax of the Target link-layer address:
 </t>
 
-<!--
-        0                   1                   2                   3
-        0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-       |     Type      |    Length     |    Link-Layer Address ...
-       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-
-Figure 66: ND Target link-layer address option format
--->
+<t>
+<figure title="ND Target link-layer address option format" anchor="tlla-syntax">
+<artwork align="center">
+ 0                   1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|     Type      |    Length     |    Link-Layer Address ...
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+</artwork>
+<postamble></postamble>
+</figure>
+</t>
 
 <t>
 The Type field is set to 2. The Length field specifies the length of the option (including the Type and Length octets) in units of 8 octets. A node that receives an ICMPv6 message with this option should verify that the Length field is valid for the underlying link-layer. For example, for IEEE 802 addresses the Length field must be 1 <xref target="RFC2464"/>. If the packet does not pass this check, it should be silently dropped. 
@@ -800,29 +839,33 @@ The Prefix Information option is used by routers to provide hosts with on-link p
 The following figure illustrates the syntax of the Prefix Information option:
 </t>
 
-<!--
-       0                   1                   2                   3
-       0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-      +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-      |     Type      |    Length     | Prefix Length |L|A|R|Reserved1|
-      +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-      |                         Valid Lifetime                        |
-      +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-      |                       Preferred Lifetime                      |
-      +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-      |                           Reserved2                           |
-      +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-      |                                                               |
-      +                                                               +
-      |                                                               |
-      +                            Prefix                             +
-      |                                                               |
-      +                                                               +
-      |                                                               |
-      +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-Figure 67: ND Prefix Information option format
--->
+<t>
+<figure title="ND Prefix Information option format" anchor="pio-syntax">
+<artwork align="center">
+ 0                   1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|     Type      |    Length     | Prefix Length |L|A|R|Reserved1|
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                         Valid Lifetime                        |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                       Preferred Lifetime                      |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                           Reserved2                           |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                                                               |
++                                                               +
+|                                                               |
++                            Prefix                             +
+|                                                               |
++                                                               +
+|                                                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+</artwork>
+<postamble></postamble>
+</figure>
+</t>
 
 <t>
 The Type field is set to 3. The Length field is set to 4 by the sender. A node processing a Prefix Information option should verify that the Length field is 4. If the option does not pass this check, the option should be ignored. 
@@ -928,21 +971,24 @@ The Redirected Header option is used in Redirect messages to convey all or part 
 The following figure illustrates the syntax of the Redirected Header option:
 </t>
 
-<!--
-       0                   1                   2                   3
-       0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-      +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-      |     Type      |    Length     |            Reserved           |
-      +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-      |                           Reserved                            |
-      +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-      |                                                               |
-      ~                       IP header + data                        ~
-      |                                                               |
-      +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-
-Figure 68: ND Redirected Header option format
--->
+<t>
+<figure title="ND Redirected Header option format" anchor="rho-syntax">
+<artwork align="center">
+ 0                   1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|     Type      |    Length     |            Reserved           |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                           Reserved                            |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                                                               |
+~                       IP header + data                        ~
+|                                                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+</artwork>
+<postamble></postamble>
+</figure>
+</t>
 
 <t>
 The Type field is 4. The Length field specifies the option size (including the Type and Length fields) in units of 8 octets. Assuming the Redirected Header option will contain at least the mandatory fields of the option (8 bytes), the fixed IPv6 header (40 bytes), and the first 8 bytes of the transport protocol header, the following validation check should be performed:
@@ -971,17 +1017,21 @@ The MTU option is used in Router Advertisement messages to ensure that all nodes
 The following figure illustrates the syntax of the MTU option:
 </t>
 
-<!--
-       0                   1                   2                   3
-       0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-      +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-      |     Type      |    Length     |           Reserved            |
-      +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-      |                              MTU                              |
-      +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+<t>
+<figure title="ND MTU option format" anchor="mtuo-syntax">
+<artwork align="center">
+ 0                   1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|     Type      |    Length     |           Reserved            |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                              MTU                              |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+</artwork>
+<postamble></postamble>
+</figure>
+</t>
 
-Figure 69: ND MTU option format
--->
 
 <t>
 The Type field identifies the kind of option and is set to 5. This option has a fixed Length that is 1. Therefore, the following sanity check should be performed:
@@ -1046,22 +1096,24 @@ The MTU option could be potentially exploited by an attacker to perform a Denial
 <t>
 The Route Information option is used to convey more-specific routes in Router Advertisement messages. The following figure illustrates the syntax of the Router Information option:
 </t>
-
-<!--
-      0                   1                   2                   3
-      0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-     +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-     |     Type      |    Length     | Prefix Length |Resvd|Prf|Resvd|
-     +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-     |                        Route Lifetime                         |
-     +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-     |                   Prefix (Variable Length)                    |
-     .                                                               .
-     .                                                               .
-     +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-
-Figure 70: ND Route Information option format
--->
+<t>
+<figure title="ND Route Information option format" anchor="rio-syntax">
+<artwork align="center">
+ 0                   1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|     Type      |    Length     | Prefix Length |Resvd|Prf|Resvd|
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                        Route Lifetime                         |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                   Prefix (Variable Length)                    |
+.                                                               .
+.                                                               .
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+</artwork>
+<postamble></postamble>
+</figure>
+</t>
 
 <t>
 The Type field identifies the type of option and is set to 24. The Length field contains the length of the option (including the Type and Length fields) in units of 8 octets. The following sanity checks should be performed on these Length field:
@@ -1147,21 +1199,24 @@ Finally, hosts should enforce a limit on the maximum number of entries in the De
 The Recursive DNS Server (RDNSS) option provides a mechanism for routers to advertise the IPv6 addresses of one or more Recursive DNS Servers. This option is specified in <xref target="RFC5006"/>. The following figure illustrates the syntax of the RDNSS options:
 </t>
 
-<!--
-      0                   1                   2                   3
-      0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-     +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-     |     Type      |     Length    |           Reserved            |
-     +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-     |                           Lifetime                            |
-     +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-     |                                                               |
-     :            Addresses of IPv6 Recursive DNS Servers            :
-     |                                                               |
-     +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-
-Figure 71: ND Recursive DNS Server option format
--->
+<t>
+<figure title="ND Recursive DNS Server option format" anchor="rdnss-syntax">
+<artwork align="center">
+ 0                   1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|     Type      |     Length    |           Reserved            |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                           Lifetime                            |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                                                               |
+:            Addresses of IPv6 Recursive DNS Servers            :
+|                                                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+</artwork>
+<postamble></postamble>
+</figure>
+</t>
 
 <t>
 The Type field identifies must be 25. The Length field specifies the length of the option (including the Type and Length fields) in units of 8 octets. The following sanity checks should be performed on the Length field:
@@ -1701,12 +1756,19 @@ The rest of the attack vectors discussed in this section could possibly be mitig
 <t>
 As discussed in <xref target="Section9.2.6.2"/> of this document, if broadcast or multicast addresses were allowed in source link-layer address options or in target link-layer address options, traffic directed to a victim IPv6 address would be sent to such broadcast or multicast IPv6 address.
 </t>
-<!--
-Consider the following network scenario:
 
 
-Figure 72: Example network scenario for forwarding loop
--->
+<t>
+Consider the following network scenario:</t>
+
+<t>
+<figure title="Example network scenario for forwarding loop" anchor="scenario">
+<artwork align="center">
+BLAH
+</artwork>
+<postamble></postamble>
+</figure>
+</t>
 
 <t>
 An attacker could poison the neighbor cache of Router A and the neighbor cache of Router B, such that the IPv6 address of Host C maps to the Ethernet broadcast address (ff:ff:ff:ff:ff:ff). Afterwards, he could send a packet to the Ethernet broadcast address (ff:ff:ff:ff:ff:ff), with an IPv6 Destination Address equal to the IPv6 address of Host C. Upon receiving the packet, both Router A and Router C would decrement the Hop Limit of the packet, and would resend it to the Ethernet broadcast address. As a result, both Router A and Router B would now receive two copies of the same packet (one sent by Router A, and another sent by Router B). This would result in a ‘chain reaction’ that would only disappear when the Hop Limit of each of the packets is decremented to 0. The total number of packets, for a general scenario in which multiple routers are present on the link and are subject of the aforementioned neighbor cache poisoning attack, and the attacker sends the initial attack packet with an arbitrary Hop Limit (possibly 255 to get the maximum amplification factor) is:</t>
