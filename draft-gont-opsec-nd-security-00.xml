@@ -18,37 +18,29 @@
     <workgroup>Operational Security Capabilities for IP Network Infrastructure (opsec)</workgroup>
 
 
-<author
-        fullname="Fernando Gont"
-        initials="F."
-        surname="Gont">
-    <!-- abbrev not needed but can be used for the header
-         if the full organization name is too long -->
-        <organization abbrev="Huawei Technologies">Huawei Technologies</organization>
-	
-        <address>
+    <author fullname="Fernando Gont" initials="F." surname="Gont">
+      <organization abbrev="SI6 Networks / UTN-FRH">SI6 Networks / UTN-FRH</organization>
 
-            <postal>    
-			<street>Evaristo Carriego 2644</street>
-		<code>1706</code><city>Haedo</city>
- 		<region>Provincia de Buenos Aires</region>
-		<country>Argentina</country>
-            </postal>
-            <phone>+54 11 4650 8472</phone>
+      <address>
+        <postal>
+          <street>Evaristo Carriego 2644</street>
 
-            <email>fgont@si6networks.com</email>
-<!--            <email>fernando@gont.com.ar</email> -->
+          <code>1706</code>
 
-<!--
-<uri>http://www.cpni.gov.uk</uri>
-<uri>http://www.gont.com.ar</uri>
--->
-<uri>http://www.si6networks.com</uri>
-        <!--            If I had a phone, fax machine, and a URI, I could add the following: --->
+          <city>Haedo</city>
 
-        </address>
-    </author>
-	
+          <region>Provincia de Buenos Aires</region>
+
+          <country>Argentina</country>
+        </postal>
+
+        <phone>+54 11 4650 8472</phone>
+
+        <email>fgont@si6networks.com</email>
+
+        <uri>http://www.si6networks.com</uri>
+      </address>
+    </author>	
 	
     <date year="2012" />
 
