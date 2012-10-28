@@ -1730,12 +1730,12 @@ This means in all traffic meant to the forged address will be delivered to the n
 
 <list style="hanging">
 <t>
-<xref target="US-CERT2008"/> is a vulnerability report about this issue.
+<xref target="CVE-2008-2476"/> is a vulnerability report about this issue.
 </t>
 </list>
 </t>
 <t>
-Some IPv6 networks employ the ‘RA-Guard’ mechanism specified in <xref target="RFC6105"/> as the first line of defence against RA-based attack vectors. However, as discussed in <xref target="I-D.ietf-v6ops-ra-guard-implementation"/>, some popular RA-Guard implementations can be easily circumvented by leveraging IPv6 extension headers.
+Some IPv6 networks employ the ‘RA-Guard’ mechanism specified in <xref target="RFC6105"/> as the first line of defence against RA-based attack vectors. However, as discussed in <xref target="I-D.ietf-v6ops-ra-guard-implementation"/>, some popular RA-Guard implementations can be easily circumvented by leveraging IPv6 extension headers as shown in <xref target="CVE-2011-2395"/>.
 </t>
 
 <t>
@@ -1810,22 +1810,18 @@ As discussed throughout <xref target="Section9.4"/> of this document, an impleme
 
 <list style="hanging">
 <t>
-Windows XP SP2 fails to enforce limits on the maximum number of configured addresses, and therefore is vulnerable to a Denial of Service attack. 
-</t>
-<t>
 FreeBSD 9.0 and NetBSD 5.1 fail to enforce limits on the number of entries in the IPv6 routing table, on the number of entries in the Neighbor Cache, on the number of entries in the Default Router List, and on the number of configured IPv6 addresses. Therefore they are vulnerable to multiple Denial of Service attacks.
 </t>
 <t>
-Windows 7 SP1 fails to enforce limits on the number of entries in the IPv6 routing table, and on the number of entries in the Neighbor Cache. Therefore, these structures could be exploited for performing a Denial of Service attack.
+All Windows versions that support IPv6 (XP to current Server 2012) fail to enforce limits on the number of entries in the IPv6 routing table, on the maximum number of configured addresses, and on the number of entries in the Neighbor Cache. Therefore, these structures could be exploited for performing a Denial of Service attack.
 </t>
-
 <t>
 Linux 2.6.38-10 does enforce a limit on the number of entries in the Default router list. However, this limit itself could be leveraged for performing a Denial of Service attack, by causing the Default router list to become full of malicious/spurious entries before a legitimate entry can be added. As a result, the system would be unable to configure a legitimate default router, even if a legitimate Router Advertisement is received at some point later.
 </t>
 </list>
 </t>
 <t>
-An attacker attached to the same network link as the target node can stress most of these data structures by sending a large number of the appropriate Neighbor Discovery options (e.g., RDNSS or Prefix Information options in Router Advertisement messages, etc.). 
+An attacker attached to the same network link as the target node can stress most of these data structures by sending a large number of the appropriate Neighbor Discovery options (e.g., RDNSS or Prefix Information options in Router Advertisement messages, etc.) as has been shown by  e.g. <xref target="CVE-2010-4669"/>. 
 </t>
 
 <t>
@@ -1963,11 +1959,23 @@ This attack is similar to the Denial-of-Service (DoS) attack described in <xref 
 As discussed in <xref target="Section9.5.1.9"/>, <xref target="RFC5942"/> updates <xref target="RFC4861"/>, such that this attack vector is eliminated. The same mitigations discussed in <xref target="Section9.5.1.9"/> of this document apply to mitigate this vulnerabilty.
 
 <list style="hanging">
-<t><xref target="US-CERT2008"/> is a vulnerability advisory about this issue.</t>
+<t><xref target="CVE-2008-2476"/> is a vulnerability advisory about this issue.</t>
 </list>
 </t>
 </section>
 </section>
+
+<section title="Miscellaneous security issues" anchor="Section9.5.4">
+<section title="Detecting Sniffing Hosts" anchor="Section9.5.4.1">
+<t>
+If a system reacts differently depending on if the network interface is in promiscious mode, this can be exploited by an attacker that is on-link to detect this.
+Such a security issue has been found on many operating systems, where a packet with a multicast MAC address that is not being listened on by that target will be processed only if it is sniffing the network.
+This test can be performed with any packet type, e.g. Neighbor Solicitation or Echo Request.
+</t>
+<t><xref target="CVE-2010-4562"/> is one vulnerability advisory about such an issue.</t>
+</section>
+</section>
+
 </section>
 
 <section title="IANA Considerations">
@@ -2171,17 +2179,46 @@ As discussed in <xref target="Section9.5.1.9"/>, <xref target="RFC5942"/> update
 	</reference>
 -->
 
-	<reference anchor="US-CERT2008" value="https://www.kb.cert.org/vuls/id/472363">
+	<reference anchor="CVE-2008-2476" value="https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2008-2476">
 		<front>
-			<title>US-CERT Vulnerability Note VU#472363: IPv6 implementations insecurely update Forwarding Information Base</title>
-			<author initials="" surname="US-CERT" fullname="US-CERT">
+			<title>CVE-2008-2476 - IPv6 Neighbor Discovery Protocol (NDP) implementations do not validate the origin of Neighbor Discovery messages</title>
+			<author initials="" surname="CVE" fullname="CVE">
 				<organization></organization>
 			</author>
 			<date year="2008"/>
 		</front>
-	
 	</reference>
 
+	<reference anchor="CVE-2010-4669" value="https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2010-4669">
+		<front>
+			<title>CVE-2010-4669 - Neighbor Discovery (ND) protocol implementation in the IPv6 stack in Microsoft Windows allows attackers to cause a denial of service (CPU consumption and system hang) by sending many Router Advertisement (RA) messages with different source addresses</title>
+			<author initials="" surname="CVE" fullname="CVE">
+				<organization></organization>
+			</author>
+			<date year="2010"/>
+		</front>
+	</reference>
+
+	<reference anchor="CVE-2011-2395" value="https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2011-2395">
+		<front>
+			<title>CVE-2011-2395 - Neighbor Discovery (ND) protocol implementation in Cisco IOS on unspecified switches allows attackers to bypass the Router Advertisement Guarding functionality via a fragmented IPv6 packets </title>
+			<author initials="" surname="CVE" fullname="CVE">
+				<organization></organization>
+			</author>
+			<date year="2011"/>
+		</front>
+	</reference>
+
+	<reference anchor="CVE-2010-4562" value="https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2010-4562">
+		<front>
+			<title>CVE-2010-4562 - Microsoft Windows, when using IPv6, allows remote attackers to determine whether a host is sniffing the network by sending an ICMPv6 Echo Request to a multicast address and determining whether an Echo Reply is sent</title>
+			<author initials="" surname="CVE" fullname="CVE">
+				<organization></organization>
+			</author>
+			<date year="2010"/>
+		</front>
+	</reference>
+	
 </references>
 
 
