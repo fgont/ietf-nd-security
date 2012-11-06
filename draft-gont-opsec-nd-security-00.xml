@@ -1983,13 +1983,16 @@ This test can be performed with any packet type, e.g. Neighbor Solicitation or E
 </section>
 
     <section title="Security Considerations">
-<t>
+<t>This entire document is about security vulnerabilities that have been found popular Neighbor Discovery implementations, and other potential security issues that might be affecting existing implementations. This document not only discusses the aforementioned issues, but also provides implementation guidance such that these issues can be eliminated from the affected implementations and completely avoided or mitigated in any new Neighbor Discovery implementations. 
+</t>
+<t>The ultimate goal of this document is to help improve the overall maturity of Neighbor Discovery implementations, and to raise awareness about current security issues that might affect IPv6 networks.
 </t>
 
     </section>
 
     <section title="Acknowledgements">
-<t></t>
+<t>
+</t>
    </section>
 
 
