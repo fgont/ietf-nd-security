@@ -1730,7 +1730,7 @@ This means in all traffic meant to the forged address will be delivered to the n
 
 <list style="hanging">
 <t>
-<xref target="CVE-2008-2476"/> is a vulnerability report about this issue.
+<xref target="CVE-2008-2476"/> and <xref target="US-CERT2008"/> are vulnerability advisories about this issue.
 </t>
 </list>
 </t>
@@ -1959,7 +1959,7 @@ This attack is similar to the Denial-of-Service (DoS) attack described in <xref 
 As discussed in <xref target="Section9.5.1.9"/>, <xref target="RFC5942"/> updates <xref target="RFC4861"/>, such that this attack vector is eliminated. The same mitigations discussed in <xref target="Section9.5.1.9"/> of this document apply to mitigate this vulnerabilty.
 
 <list style="hanging">
-<t><xref target="CVE-2008-2476"/> is a vulnerability advisory about this issue.</t>
+<t><xref target="CVE-2008-2476"/> and <xref target="US-CERT2008"/> are vulnerability advisories about this issue.</t>
 </list>
 </t>
 </section>
@@ -1968,8 +1968,8 @@ As discussed in <xref target="Section9.5.1.9"/>, <xref target="RFC5942"/> update
 <section title="Miscellaneous security issues" anchor="Section9.5.4">
 <section title="Detecting Sniffing Hosts" anchor="Section9.5.4.1">
 <t>
-If a system reacts differently depending on if the network interface is in promiscious mode, this can be exploited by an attacker that is on-link to detect this.
-Such a security issue has been found on many operating systems, where a packet with a multicast MAC address that is not being listened on by that target will be processed only if it is sniffing the network.
+If a system reacts differently depending on whether the network interface is in promiscious mode, this can be leveraged by an attacker that is on-link to infer whether the target node is in promiscuous mode.
+Such a security issue has been found on many operating systems, where a packet with a multicast MAC address that is not being listened on by that target will be processed only if the receiving node is in promiscuous mode (i.e., "sniffing" the network).
 This test can be performed with any packet type, e.g. Neighbor Solicitation or Echo Request.
 </t>
 <t><xref target="CVE-2010-4562"/> is one vulnerability advisory about such an issue.</t>
@@ -2217,6 +2217,17 @@ This test can be performed with any packet type, e.g. Neighbor Solicitation or E
 			</author>
 			<date year="2010"/>
 		</front>
+	</reference>
+
+	<reference anchor="US-CERT2008" value="https://www.kb.cert.org/vuls/id/472363">
+		<front>
+			<title>US-CERT Vulnerability Note VU#472363: IPv6 implementations insecurely update Forwarding Information Base</title>
+			<author initials="" surname="US-CERT" fullname="US-CERT">
+				<organization></organization>
+			</author>
+			<date year="2008"/>
+		</front>
+	
 	</reference>
 	
 </references>
