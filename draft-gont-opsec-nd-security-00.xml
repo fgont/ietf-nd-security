@@ -664,7 +664,7 @@ To reduce the impact of these packets on the system performance, a few counter-m
 </list>
 </t>
 <t>
-The first check avoids a large number of Neighbor Discovery packets to overwhelm the system in question. The second check avoids packets with multiple Neighbor Discovery options to affect the performance of the system.
+The first check avoids a large number of Neighbor Discovery packets to overwhelm the system in question. Most implementations have been seen vulnerable because this basic security mechanism was not in place, e.g. <xref target="CVE-2011-2391"/>. The second check avoids packets with multiple Neighbor Discovery options to affect the performance of the system.
 </t>
 <t>
 Option Length
@@ -934,7 +934,7 @@ Additionally, a node should verify that the Prefix does not contain a multicast 
 </t>
 
 <t>
-An attacker could exploit the Prefix information option to perform a Denial-of-Service attack, by sending a large number of Router Advertisements with the Prefix Information options that have the A bit set, therefore advising the receiving systems to configure an IPv6 address with each of these prefixes. If an implementation does not enforce a limit on the number of addresses they configure in response to Router Advertisements, the aforementioned attack might result in buffer overflows or kernel memory exhaustion. We recommend hosts to default to a maximum number of configured addresses (for each interface) of 16.
+An attacker could exploit the Prefix information option to perform a Denial-of-Service attack, by sending a large number of Router Advertisements with the Prefix Information options that have the A bit set, therefore advising the receiving systems to configure an IPv6 address with each of these prefixes. If an implementation does not enforce a limit on the number of addresses they configure in response to Router Advertisements, the aforementioned attack might result in buffer overflows or kernel memory exhaustion. An example for this vulnerabiity is  <xref target="CVE-2010-4669"/>We recommend hosts to default to a maximum number of configured addresses (for each interface) of 16.
 </t>
 
 <t>
@@ -1164,7 +1164,7 @@ The Prefix field contains the actual IPv6 prefix that, together with the Prefix 
 </t>
 
 <t>
-The Route information option has a number of security implications. Firstly, an attacker could forge Router Advertisements with a higher ‘preference’ value (Prf), thus overriding the existing default routers at the attacked system. Secondly, an attacker could exploit this option to implant more specific routes to a victim prefix at the attacked system, thus overriding the existing routes for that victim prefix. Thirdly, an attacker could cause an existing route to a victim prefix to be removed from the routing table of the attacked host, by forging a Route Information option that contains a Route Lifetime of 0 (or some other small value). Fourthly, if an implementation does not enforce limits on the size of the Destination Cache, an attacker could possibly exhaust the kernel memory of that system by forging a large number of Route Information options (possibly in many different Router Advertisements), such that the attacked system consumes its kernel memory to install those routes.
+The Route information option has a number of security implications. Firstly, an attacker could forge Router Advertisements with a higher ‘preference’ value (Prf), thus overriding the existing default routers at the attacked system. Secondly, an attacker could exploit this option to implant more specific routes to a victim prefix at the attacked system, thus overriding the existing routes for that victim prefix. Thirdly, an attacker could cause an existing route to a victim prefix to be removed from the routing table of the attacked host, by forging a Route Information option that contains a Route Lifetime of 0 (or some other small value). Fourthly, if an implementation does not enforce limits on the size of the Destination Cache, an attacker could possibly exhaust the kernel memory or high CPU usage of that system by forging a large number of Route Information options (possibly in many different Router Advertisements), such that the attacked system consumes its kernel memory to install those routes or consume large amounts of CPU time to process the information (see <xref target="CVE-2012-notyet"/>).
 </t>
 
 <t>
@@ -1172,7 +1172,7 @@ A general mitigation for the security implications of Router Advertisements that
 </t>
 
 <t>
-We recommend hosts to not simply discard a default router entry when a Router Preference with a higher Prf value is received. In particular, default routers that are known to be working should not be discarded when such Router Advertisements are received.
+We recommend hosts to not simply discard a default router entry when a Router Preference with a higher Prf value is received. [!!! I would not recommend this, as there are lots of Internet advice to send with high priority to cope with windows connection sharing RA problems !!!] In particular, default routers that are known to be working should not be discarded when such Router Advertisements are received.
 </t>
 
 <t>
@@ -2182,6 +2182,26 @@ This test can be performed with any packet type, e.g. Neighbor Solicitation or E
 	</reference>
 -->
 
+	<reference anchor="CVE-2012-notyet" value="https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2012-notyet">
+		<front>
+			<title>CVE-2012-notyet - entry is upcoming ... to be filled</title>
+			<author initials="" surname="CVE" fullname="CVE">
+				<organization></organization>
+			</author>
+			<date year="2012"/>
+		</front>
+	</reference>
+
+	<reference anchor="CVE-2011-2391" value="https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2011-2391">
+		<front>
+			<title>CVE-2011-2391 - IPv6 Neighbor Discovery Protocol (NDP) implementations do not limit the rate of Neighbor Discovery messages processed</title>
+			<author initials="" surname="CVE" fullname="CVE">
+				<organization></organization>
+			</author>
+			<date year="2011"/>
+		</front>
+	</reference>
+
 	<reference anchor="CVE-2008-2476" value="https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2008-2476">
 		<front>
 			<title>CVE-2008-2476 - IPv6 Neighbor Discovery Protocol (NDP) implementations do not validate the origin of Neighbor Discovery messages</title>
@@ -2191,7 +2211,7 @@ This test can be performed with any packet type, e.g. Neighbor Solicitation or E
 			<date year="2008"/>
 		</front>
 	</reference>
-
+	
 	<reference anchor="CVE-2010-4669" value="https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2010-4669">
 		<front>
 			<title>CVE-2010-4669 - Neighbor Discovery (ND) protocol implementation in the IPv6 stack in Microsoft Windows allows attackers to cause a denial of service (CPU consumption and system hang) by sending many Router Advertisement (RA) messages with different source addresses</title>
