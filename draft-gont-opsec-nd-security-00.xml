@@ -53,6 +53,10 @@ Neighbor Discovery is one of the core protocols of the IPv6 suite, and provides 
 
   <middle>
 
+<section title="DISCLAIMER" anchor="disclaimer">
+<t>This is WORK IN PROGRESS. Some of the recommendations might possibly change. For instance, some (NOT all) of the proposed "sanity checks" help reduce vulnerability to some attacks at the expense of e.g. reduced responsiveness. Further discussion might find some of such checks to be inadequate or inappropriate. On the other hand, some of mitigations discussed in this document have been incorporated into popular Neighbor Discovery (ND) implementations.</t>
+</section>
+
 <section title="Introduction">
 <t>
 Neighbor Discovery is used by nodes on the same link to discover each other’s presence, to determine each other’s link-layer addresses, to find routers, and to maintain reachability information about the paths to active neighbors <xref target="RFC4861"/>.
@@ -462,7 +466,7 @@ For solicited Neighbor Advertisements, the Target Address is set to the Target A
 <list style="numbers">
 <t>It must not be a multicast address (as required in Section 4.4 of <xref target="RFC4861"/></t>
 <t>It must not be the unspecified address (::)</t>
-<t>It must not be the loopbak address (::1)</t>
+<t>It must not be the loopback address (::1)</t>
 </list>
 </t>
 
@@ -664,7 +668,10 @@ To reduce the impact of these packets on the system performance, a few counter-m
 </list>
 </t>
 <t>
-The first check avoids a large number of Neighbor Discovery packets to overwhelm the system in question. Most implementations have been seen vulnerable because this basic security mechanism was not in place, e.g. <xref target="CVE-2011-2391"/>. The second check avoids packets with multiple Neighbor Discovery options to affect the performance of the system.
+The first check avoids a large number of Neighbor Discovery packets to overwhelm the system in question. The second check avoids packets with multiple Neighbor Discovery options to affect the performance of the system.
+<list style="hanging">
+<t>Most implementations fail to rate-limit ND packets, and hence have been found vulnerable to the aforementioned issue (see e.g. <xref target="CVE-2011-2391"/>).</t>
+</list>
 </t>
 <t>
 Option Length
@@ -934,7 +941,12 @@ Additionally, a node should verify that the Prefix does not contain a multicast 
 </t>
 
 <t>
-An attacker could exploit the Prefix information option to perform a Denial-of-Service attack, by sending a large number of Router Advertisements with the Prefix Information options that have the A bit set, therefore advising the receiving systems to configure an IPv6 address with each of these prefixes. If an implementation does not enforce a limit on the number of addresses they configure in response to Router Advertisements, the aforementioned attack might result in buffer overflows or kernel memory exhaustion. An example for this vulnerabiity is  <xref target="CVE-2010-4669"/>We recommend hosts to default to a maximum number of configured addresses (for each interface) of 16.
+An attacker could exploit the Prefix information option to perform a Denial-of-Service attack, by sending a large number of Router Advertisements with the Prefix Information options that have the A bit set, therefore advising the receiving systems to configure an IPv6 address with each of these prefixes. If an implementation does not enforce a limit on the number of addresses they configure in response to Router Advertisements, the aforementioned attack might result in buffer overflows or kernel memory exhaustion. 
+<list style="hanging">
+<t><xref target="CVE-2010-4669"/> is one vulnerability report about the aforementioned issue.</t>
+</list>
+</t>
+<t>We recommend hosts to default to a maximum number of configured addresses (for each interface) of 16.
 </t>
 
 <t>
@@ -1164,15 +1176,18 @@ The Prefix field contains the actual IPv6 prefix that, together with the Prefix 
 </t>
 
 <t>
-The Route information option has a number of security implications. Firstly, an attacker could forge Router Advertisements with a higher ‘preference’ value (Prf), thus overriding the existing default routers at the attacked system. Secondly, an attacker could exploit this option to implant more specific routes to a victim prefix at the attacked system, thus overriding the existing routes for that victim prefix. Thirdly, an attacker could cause an existing route to a victim prefix to be removed from the routing table of the attacked host, by forging a Route Information option that contains a Route Lifetime of 0 (or some other small value). Fourthly, if an implementation does not enforce limits on the size of the Destination Cache, an attacker could possibly exhaust the kernel memory or high CPU usage of that system by forging a large number of Route Information options (possibly in many different Router Advertisements), such that the attacked system consumes its kernel memory to install those routes or consume large amounts of CPU time to process the information (see <xref target="CVE-2012-notyet"/>).
+The Route information option has a number of security implications. Firstly, an attacker could forge Router Advertisements with a higher ‘preference’ value (Prf), thus overriding the existing default routers at the attacked system. Secondly, an attacker could exploit this option to implant more specific routes to a victim prefix at the attacked system, thus overriding the existing routes for that victim prefix. Thirdly, an attacker could cause an existing route to a victim prefix to be removed from the routing table of the attacked host, by forging a Route Information option that contains a Route Lifetime of 0 (or some other small value). Fourthly, if an implementation does not enforce limits on the size of the Destination Cache, an attacker could possibly exhaust the kernel memory or CPU cycles of that system by forging a large number of Route Information options (possibly in many different Router Advertisements), such that the attacked system consumes its kernel memory and/or its CPU time to install those routes (see e.g. <xref target="CVE-2012-notyet"/>).
 </t>
 
 <t>
-A general mitigation for the security implications of Router Advertisements that can be applied when the protocols are deployed is to restrict which ports of a managed switch can send Router Advertisement messages. That is, Router Advertisements received on all other ports of the switch would be discarded.
+A general mitigation for the security implications of Router Advertisements that can be applied when the protocols are deployed is to restrict which ports of a managed switch can send Router Advertisement messages. That is, Router Advertisements received on all other ports of the switch would be discarded. This mechanism is commonly-known as Router Advertisement Guard (RA-Guard) <xref target="RFC6104"/> <xref target="RFC6105"/> <xref target="I-D.ietf-v6ops-ra-guard-implementation"/>.
 </t>
 
 <t>
-We recommend hosts to not simply discard a default router entry when a Router Preference with a higher Prf value is received. [!!! I would not recommend this, as there are lots of Internet advice to send with high priority to cope with windows connection sharing RA problems !!!] In particular, default routers that are known to be working should not be discarded when such Router Advertisements are received.
+We recommend hosts to not simply discard a default router entry when a Router Preference with a higher Prf value is received. <!-- [!!! I would not recommend this, as there are lots of Internet advice to send with high priority to cope with windows connection sharing RA problems !!!] -->In particular, default routers that are known to be working should not be discarded when such Router Advertisements are received.
+<list style="hanging">
+<t>This means that the higher-priority router would override the existing default router, but the latter would still be kept in the "default routers list", such that if the newly-learned router is found to be non-working, the existing (lower-priority) router could still be employed).</t>
+</list>
 </t>
 
 <t>
@@ -1322,7 +1337,7 @@ Section 6.3.4 of <xref target="RFC4861"/> states that when a Router Advertisemen
 </t>
 
 <t>
-While this requirement guarantees that the relevant information can be updated in a timely fashion, it also guarantees that an attacker connected to the local link always has the chance to maliciously override the values of parameters previously learnt from Router Advertisements.
+While this requirement guarantees that the relevant information can be updated in a timely fashion, it also guarantees that an attacker connected to the local link always has the chance to maliciously override the values of parameters previously learned from Router Advertisements.
 </t>
 
 <t>
@@ -1968,7 +1983,7 @@ As discussed in <xref target="Section9.5.1.9"/>, <xref target="RFC5942"/> update
 <section title="Miscellaneous security issues" anchor="Section9.5.4">
 <section title="Detecting Sniffing Hosts" anchor="Section9.5.4.1">
 <t>
-If a system reacts differently depending on whether the network interface is in promiscious mode, this can be leveraged by an attacker that is on-link to infer whether the target node is in promiscuous mode.
+If a system reacts differently depending on whether the network interface is in promiscuous mode, this can be leveraged by an attacker that is on-link to infer whether the target node is in promiscuous mode.
 Such a security issue has been found on many operating systems, where a packet with a multicast MAC address that is not being listened on by that target will be processed only if the receiving node is in promiscuous mode (i.e., "sniffing" the network).
 This test can be performed with any packet type, e.g. Neighbor Solicitation or Echo Request.
 </t>
@@ -1990,12 +2005,18 @@ This test can be performed with any packet type, e.g. Neighbor Solicitation or E
 
     </section>
 
+
+
     <section title="Acknowledgements">
-<t>
+
+<t>This document is based on the technical report "Security Assessment of the Internet Protocol version 6 (IPv6)" <xref target="CPNI-IPv6"/> authored by Fernando Gont on behalf of the UK Centre for the Protection of National Infrastructure (CPNI). The author would like to thank to thank (in alphabetical order) Ran Atkinson, Fred Baker, Brian Carpenter, Roque Gagliano, Guillermo Gont, Alfred Hönes, Qing Li, Neil Long, and Pekka Savola, for providing valuable feedback on earlier versions of such document. Additionally, the author would like to thank (in alphabetical order) Ran Atkinson, Brian Carpenter, Joel M. Halpern, Robert Hinden, Pekka Savola, Fred Templin, and Ole Troan, who generously answered a number of questions when authoring the aforementioned document.
 </t>
+
    </section>
 
-
+<section title="Contributors">
+<t>Marc Heuse contributed text, edits, comments, and new vulnerabilities that were incorporated into this document.</t>
+</section>
 
   </middle>
 
